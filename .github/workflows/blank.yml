@@ -28,8 +28,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install --include=dev
-        working-directory: n8n-demo
+        working-directory: demo
 
       - name: Run tests
         run: npm run test
-        working-directory: n8n-demo
+        working-directory: demo
