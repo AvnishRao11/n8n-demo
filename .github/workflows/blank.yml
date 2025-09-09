@@ -1,9 +1,9 @@
 name: Run Tests
 
 on:
-  workflow_dispatch:   # Allows manual + API triggers
+  workflow_dispatch:   # Trigger manually or via API
   push:                # Optional: run on every push
-    branches: [ main ] # adjust branch if needed
+    branches: [ main ] # Change if your branch is not 'main'
 
 jobs:
   build-and-test:
@@ -16,10 +16,20 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18   # or your project version
+          node-version: 18   # Or the version your project requires
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('n8n-demo/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install --include=dev
+        working-directory: n8n-demo
 
       - name: Run tests
         run: npm run test
+        working-directory: n8n-demo
